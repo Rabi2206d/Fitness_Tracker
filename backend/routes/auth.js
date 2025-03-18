@@ -43,24 +43,27 @@ router.post("/adduser" , async (req , res)=>{
 
 
 // Route 2 : LogIn
-router.post("/login" , (req , res)=>{
+router.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-
-    const {email,password} = req.body;
-
-    User.findOne({email:email}).then(userData => {
-        if(userData){
-            if(userData.password == password && userData.status == 'users'){
-                res.json('UserData');
-            }
-           else if(userData.password == password && userData.status == 'admin'){
-                res.json('AdminData');
-            }
+        const userData = await User.findOne({ email });
+        if (!userData) {
+            return res.json({ message: 'User not found' });
         }
-        else{
-            res.json({message: 'User not found'})
+
+        const isMatch = await bcrypt.compare(password, userData.password);
+        if (!isMatch) {
+            return res.json({ message: 'Invalid Credentials' });
         }
-    });
+
+        res.json({ status: userData.status === 'admin' ? 'AdminData' : 'UserData' });
+    } catch (error) {
+        console.error("Login Error:", error);
+        res.status(500).json({ message: 'Server Error', error });
+    }
+});
+
 
     // const {email , password} = req.body;
 
@@ -92,7 +95,9 @@ router.post("/login" , (req , res)=>{
     // } catch (error) {
     //    res.status(500).json({error : "Internal Server Error"}) 
     // }
-})
+
+
+
 
 
 // Route 3 : User get

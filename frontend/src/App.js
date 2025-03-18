@@ -4,6 +4,8 @@ import './App.css';
 // import Header from './components/userscreen/header';
 import Login from './components/userscreen/login';
 import Register from './components/userscreen/register';
+import Home from './components/userscreen/home';
+import AdminHome from './components/userscreen/admin';
 
 function App() {
   return (
@@ -12,7 +14,8 @@ function App() {
      <Routes>
       <Route path='/' element={ <Login/>}/>
       <Route path='/register' element={ <Register/>}/>
-
+      <Route path='/home' element={<Home/>}/>
+      <Route path='/admin' element={<AdminHome/>}/>
      </Routes>
     </div>
     </Router>

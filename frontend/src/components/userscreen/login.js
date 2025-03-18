@@ -1,26 +1,33 @@
 import React, { useState } from 'react'
 import Header from './header'
 import axios from 'axios'
+import {useNavigate} from "react-router-dom"
 
 function Login() { 
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const navigate = useNavigate();
 
     const loginUser = () => {
-        axios.post('http://localhost:4000/api/login', {email, password}).then(result => {console.log(result)
-        if(result.data === 'UserData'){
-            alert('userlogin')
-        }
-        else if(result.data === 'AdminData'){
-            alert('Admin login')
-        }
-        else{
-            alert('Error  ')
-        }
-        });
-        
+        axios.post('http://localhost:4000/api/login', { email, password })
+            .then(result => {
+                console.log(result);
+                if (result.data.status === 'UserData') {
+                    navigate('/home')
+                } else if (result.data.status === 'AdminData') {
+                    navigate('/admin')
+
+                } else {
+                    alert(result.data.message || 'Error');
+                }
+            })
+            .catch(error => {
+                console.error("Login Error:", error);
+                alert('Server error, please try again later.');
+            });
     };
+    
 
 
     return (

@@ -31,6 +31,10 @@ const UserSchema = new Schema({
     type:String,
     default:"users"
     },
+    file:{
+        type:String,
+        require:true
+    },
     createdAt : {
         type : Date,
         default : Date.now

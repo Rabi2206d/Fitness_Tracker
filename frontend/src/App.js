@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './App.css';
-// import Header from './components/userscreen/header';
 import Login from './components/userscreen/login';
 import Register from './components/userscreen/register';
 import Home from './components/userscreen/home';

@@ -2,17 +2,32 @@ import express from 'express';
 import User from "../Models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import path from 'path'; // Import path module
 import "dotenv/config.js"
-import fetchUser from '../midleware/fetchUser.js'
+// import fetchUser from '../midleware/fetchUser.js'
 
 const router = express.Router();
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');  // Store in 'uploads' folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));  // Use timestamp to avoid filename conflicts
+  }
+});
+
+// Pass the storage configuration to multer
+const upload = multer({ storage });
+  
 
 // Route 1 : Sign Up
-router.post("/adduser" , async (req , res)=>{
+router.post("/adduser" , upload.single('file') ,async (req , res)=>{
     const {name , email , password ,phone,specialization,experience} = req.body;
+    const profile = req.file.filename;
     try {
-        if(!name || !email || !password || !phone || !specialization || !experience ){
+        if(!name || !email || !password || !phone || !specialization || !experience || !profile ){
             return res.status(400).json({error : "All Fields Are required"});
         }
     
@@ -29,12 +44,12 @@ router.post("/adduser" , async (req , res)=>{
         const hashedPassword = await bcrypt.hash(password , salt);
 
         const newUser = new User({
-            name , email , password : hashedPassword ,phone,specialization,experience
+            name , email , password : hashedPassword ,phone,specialization,experience,file:profile
         })
 
         res.status(200).json({success : "User Created"});
-        console.log(newUser);
         newUser.save();
+        console.log(newUser);
 
     } catch (error) {
         res.status(500).json({error : "Internal Server Error"});
@@ -101,15 +116,15 @@ router.post("/login", async (req, res) => {
 
 
 // Route 3 : User get
-router.get("/getuser" , fetchUser , async (req ,res)=>{
-    try {
-        const userId = req.userId;
-        const user = await User.findById(userId).select('-password');
-        res.status(200).json({user});
-    } catch (error) {
-       res.status(500).json({error : "Internal Server Error"});
-    }
-})
+// router.get("/getuser" , fetchUser , async (req ,res)=>{
+//     try {
+//         const userId = req.userId;
+//         const user = await User.findById(userId).select('-password');
+//         res.status(200).json({user});
+//     } catch (error) {
+//        res.status(500).json({error : "Internal Server Error"});
+//     }
+// })
 
 
 

@@ -9,50 +9,56 @@ function Register() {
     const [phone, setPhone] = useState('');
     const [specialization, setSpecial] = useState('');
     const [experience, setExperience] = useState('');
+    const [file, setFile] = useState('');
 
-    const adduserrecord = async () => {
-
-        if (!name || !email || !password || !phone || !specialization || !experience) {
+    const adduserrecord = async (e) => {
+        e.preventDefault();
+        if (!name || !email || !password || !phone || !specialization || !experience || !file) {
             console.log("All fields are required.");
             return;
         }
-
+    
         if (!email.includes('@')) {
             console.log("Invalid Email Address.");
             return;
         }
-
+    
         if (password.length < 6) {
             console.log("Password must be at least 6 characters.");
             return;
         }
-
+    
         if (phone.length < 10) {
             console.log("Phone number must be at least 10 digits.");
             return;
         }
-
+    
         try {
+            const formdata = new FormData();
+            formdata.append("name", name);
+            formdata.append("email", email);
+            formdata.append("password", password);
+            formdata.append("phone", phone);
+            formdata.append("specialization", specialization);
+            formdata.append("experience", experience);
+            formdata.append("file", file); // File ko bhi append karna zaroori hai
+    
             const response = await fetch('http://localhost:4000/api/adduser', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password, phone, specialization, experience })
+                body: formdata, // Body mein FormData bhejna hai
             });
-
-            let data = await response.json();
-            console.log(data);
-
+    
+            
             if (response.ok) {
+                let data = await response.json();
+                console.log(data);
                 console.log("User registered successfully.");
-            } else {
-                console.log("Error:", data.error);
-            }
+            } 
         } catch (error) {
             console.log("Error:", error.message);
         }
     };
+    
 
     return (
         <>
@@ -89,7 +95,8 @@ function Register() {
                     <label for="experience">Experience</label>
                     <input type="text" class="form-control" id="experience" placeholder="Enter experience" onChange={(e) => setExperience(e.target.value)} />
                 </div>
-
+                <label for="experience">Image</label>
+                <input type='file' className='form-control mt-2' onChange={(e) => setFile(e.target.files[0])} ></input>
                 <button type="submit" onClick={adduserrecord} class="btn btn-primary mt-5">Submit</button>
             </div>
         </>

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Header from './header'
-import axios from 'axios'
 import {useNavigate} from "react-router-dom"
 
 function Login() { 
@@ -9,23 +8,28 @@ function Login() {
     const [password, setPassword] = useState();
     const navigate = useNavigate();
 
-    const loginUser = () => {
-        axios.post('http://localhost:4000/api/login', { email, password })
-            .then(result => {
-                console.log(result);
-                if (result.data.status === 'UserData') {
-                    navigate('/home')
-                } else if (result.data.status === 'AdminData') {
-                    navigate('/admin')
+    
 
-                } else {
-                    alert(result.data.message || 'Error');
-                }
-            })
-            .catch(error => {
-                console.error("Login Error:", error);
-                alert('Server error, please try again later.');
+    const loginUser = async () => {
+        try {
+            const res = await fetch('http://localhost:4000/api/login',{
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',    
+                },
+                body : JSON.stringify({email ,password})
             });
+            const logindata = await res.json()
+            console.log(logindata);
+            localStorage.setItem("token",logindata.token);
+            if (logindata.user && logindata.user.status === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/user');
+            }
+        } catch (error) {
+            console.error("Login failed", error);
+        }
     };
     
 

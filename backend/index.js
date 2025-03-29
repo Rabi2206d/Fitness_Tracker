@@ -1,5 +1,5 @@
 import express from 'express';
-import connectToMongo from './database/db.js';
+import connectToMongo from './Database/db.js';
 import auth from "./routes/auth.js"
 import cors  from 'cors';
 import nutritionrouter from './routes/nutrition.js';

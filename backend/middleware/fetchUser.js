@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 
-
 const fetchUser = (req,res, next)=>
 {
     const token = req.header('auth-token');
@@ -10,7 +9,7 @@ const fetchUser = (req,res, next)=>
     }
     try {
         
-        const decode = jwt.verify(token , 'HMS')
+        const decode = jwt.verify(token , process.env.JWT_SECRET)
         req.userid = decode.userid
         next()
     } catch (error) {

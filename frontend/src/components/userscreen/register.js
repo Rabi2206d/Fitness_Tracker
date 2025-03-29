@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Header from './header'
-import { use } from 'react'
 
 function Register() {
     const [name, setName] = useState('');

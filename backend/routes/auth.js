@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import multer from "multer";
 import path from 'path'; // Import path module
 import "dotenv/config.js"
-// import fetchUser from '../midleware/fetchUser.js'
+import fetchUser from '../middleware/fetchUser.js'
 
 const router = express.Router();
 
@@ -72,7 +72,33 @@ router.post("/login", async (req, res) => {
             return res.json({ message: 'Invalid Credentials' });
         }
 
-        res.json({ status: userData.status === 'admin' ? 'AdminData' : 'UserData' });
+        const payload = {
+            user: {
+                id: userData._id
+            }
+        };
+
+        
+       // Sign the JWT
+       jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '7d'
+    }, (err, token) => {
+        if (err) {
+            console.error("Error signing token: ", err);
+            return res.status(500).json({ err: 'Error signing token' });
+        }
+        res.status(200).json({ 
+            token,
+            user: {
+                id: userData._id,
+                name: userData.name,
+                email: userData.email,
+                status: userData.status
+            }
+        });
+        console.log("User  token is: " + token);
+    });
+
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).json({ message: 'Server Error', error });

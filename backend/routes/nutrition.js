@@ -1,5 +1,5 @@
 import express from "express";
-import fetchUser from "../midleware/fetchUser.js";
+import fetchUser from "../middleware/fetchUser.js";
 import Nutritiondata from '../Models/Nutrition.js';
 const nutritionrouter = express.Router();
 

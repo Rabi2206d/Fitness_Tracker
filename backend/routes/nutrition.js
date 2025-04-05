@@ -15,7 +15,7 @@ nutritionrouter.get("/getnutrition" , fetchUser , async (req , res)=>{
 
 // Route : 2 Add Note
 nutritionrouter.post("/addnutrition" , fetchUser , async (req , res)=>{
-    const {mealType , foodItems , calories} = req.body;
+    const { mealType, foodItems, calories, macros } = req.body;
     
     try {
        if(!mealType || !foodItems || !calories){
@@ -23,10 +23,11 @@ nutritionrouter.post("/addnutrition" , fetchUser , async (req , res)=>{
        }
 
        const nutrition = new Nutritiondata({
+        user: req.userid,
         mealType,
         foodItems,
         calories,
-        user : req.userId
+        macros,
        })
        const saveNutrition = await nutrition.save();
        res.status(200).json(saveNutrition);
@@ -58,7 +59,40 @@ nutritionrouter.delete("/deletenutrition/:id", fetchUser, async(req,res)=>{
 })
 
 
-// Route : 4 Update Note
+// Route : 4 Update Nutrition
+nutritionrouter.put("/updatenutrition/:id", fetchUser, async (req, res) => {
+    const { id } = req.params;
+    const { mealType, foodItems, calories } = req.body;
+
+    try {
+        // Find the nutrition record by ID
+        let nutrition = await Nutritiondata.findById(id);
+
+        // If nutrition doesn't exist, return an error
+        if (!nutrition) {
+            return res.status(400).json({ error: "Nutrition record not found" });
+        }
+
+        // Ensure the user is the owner of the nutrition record
+        if (nutrition.user.toString() !== req.userId) {
+            return res.status(403).json({ error: "Not allowed to update another user's record" });
+        }
+
+        // Update the nutrition record with the new data
+        nutrition = await Nutritiondata.findByIdAndUpdate(
+            id,
+            { $set: { mealType, foodItems, calories } },
+            { new: true }
+        );
+
+        // Return the updated nutrition record
+        return res.status(200).json(nutrition);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 //Route : 5 // update and fetch route
 nutritionrouter.get('getnotebyid/:id',fetchUser ,async (req,res)=>

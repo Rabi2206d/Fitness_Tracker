@@ -3,18 +3,20 @@ const {Schema} = mongoose;
 const { ObjectId } = mongoose.Schema.Types;
 
 const progressSchema = new Schema({
-    user : {
-        type : ObjectId,
-        ref : 'user'
+    user: { type: ObjectId, ref: 'User' },
+    weight: Number,
+    measurements: {
+      chest: Number,
+      waist: Number,
+      hips: Number,
+      arms: Number,
+      legs: Number,
     },
-    weight : {
-        type : String,
-        required : true
+    performance: {
+      runTime: Number, // in seconds
+      maxLift: Number, // weight lifted
     },
-    createdAt : {
-        type : Date,
-        default : Date.now
-    }
+    date: { type: Date, default: Date.now },
 })
 
 export default model('progress' , progressSchema);

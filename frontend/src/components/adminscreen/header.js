@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function AdminHeader() {
+function AdminHeader({ file ,userName }) {
     return (
         <>
             <div id="layout-wrapper">
@@ -629,9 +629,14 @@ function AdminHeader() {
                                 <div class="dropdown ms-sm-3 header-item topbar-user">
                                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="d-flex align-items-center">
-                                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar" />
+                                            <img
+                                                className="rounded-circle header-profile-user"
+                                                src={`http://localhost:4000/${file}`}  // Dynamically set the avatar image
+                                                alt="Header Avatar"
+                                                style={{ width: '50px', height: '50px' }}
+                                            />
                                             <span class="text-start ms-xl-2">
-                                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna Adame</span>
+                                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{userName}</span>
                                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                                             </span>
                                         </span>
@@ -737,14 +742,14 @@ function AdminHeader() {
                                     </Link>
                                 </li>
                                 <li class="nav-item">
-                                    <Link class="nav-link menu-link"  to="/user">
+                                    <Link class="nav-link menu-link" to="/user">
                                         <i class="ri-apps-2-line"></i> <span>Users</span>
                                     </Link>
                                 </li>
 
                                 <li class="nav-item">
                                     <Link class="nav-link menu-link" to="/chat">
-                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Chat</span> 
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Chat</span>
                                     </Link>
                                 </li>
 

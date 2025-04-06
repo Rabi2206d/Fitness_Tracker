@@ -124,7 +124,7 @@ router.post("/login", async (req, res) => {
 
     //     const dotMatch = await bcrypt.compare(password , user.password);
     //     if(dotMatch){
-    //         const token = jwt.sign({userId : user.id} , process.env.JWT_SECRET , {
+    //         const token = jwt.sign({userid : user.id} , process.env.JWT_SECRET , {
     //             expiresIn : "7d"
     //         })
     //         return res.status(200).json({token});
@@ -144,8 +144,8 @@ router.post("/login", async (req, res) => {
 // Route 3 : User get
 // router.get("/getuser" , fetchUser , async (req ,res)=>{
 //     try {
-//         const userId = req.userId;
-//         const user = await User.findById(userId).select('-password');
+//         const userid = req.userid;
+//         const user = await User.findById(userid).select('-password');
 //         res.status(200).json({user});
 //     } catch (error) {
 //        res.status(500).json({error : "Internal Server Error"});

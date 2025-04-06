@@ -5,29 +5,35 @@ import auth from './routes/auth.js';
 import nutritionrouter from './routes/nutrition.js';
 import classrouter from './routes/class.js';
 import trainerrouter from './routes/trainer.js';
-import usersRouter from './routes/users.js';  // Correct import after fixing default export
+import workoutrouter from './routes/workout.js';
+import progressrouter from './routes/progress.js';
+import feedbackrouter from './routes/feedback.js';
+import dashboardRouter from './routes/dashboard.js';
+import exportrouter from './routes/export.js';
+import usersRouter from './routes/users.js';
 
 const app = express();
 const port = 4000;
 
-// Use CORS middleware
-app.use(cors());
-
-// Connect to MongoDB
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 connectToMongo();
-
-// Middleware for parsing JSON requests
 app.use(express.json());
 
-// Register routes
-app.use('/api', usersRouter);  // Use the usersRouter here
-app.use('/api', auth);
-app.use('/api', nutritionrouter);
-app.use('/api', classrouter);
-app.use('/api', trainerrouter);
+app.use('/api/', usersRouter); 
+app.use("/api/" , auth);
+app.use("/api/" , nutritionrouter);
+app.use("/api/" , classrouter);
+app.use("/api/" , trainerrouter);
+app.use("/api/" , workoutrouter);
+app.use("/api/" , progressrouter);
+app.use("/api/" , feedbackrouter);
+app.use("/api/" , dashboardRouter);
+app.use("/api/export" , exportrouter);
 app.use('/uploads', express.static('uploads'));
 
-// Start the server
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+app.listen(port , ()=>{
+    console.log(`App listen at http://localhost:${port}`)
 });

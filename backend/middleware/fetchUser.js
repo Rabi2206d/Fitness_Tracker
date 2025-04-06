@@ -9,7 +9,7 @@ const fetchUser = (req,res, next)=>
     }
     try { 
         const decode = jwt.verify(token , process.env.JWT_SECRET)
-        req.userid = decode.userid
+        req.userid = decode.user.id
         next()
     } catch (error) {
         return res.status(500).json({err : 'Internal Server error'})

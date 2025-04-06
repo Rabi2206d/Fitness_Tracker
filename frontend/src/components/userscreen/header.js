@@ -231,7 +231,7 @@ function UserHeader() {
                                 </div>
 
 
-                                <div class="dropdown topbar-head-dropdown ms-1 header-item">
+                                {/* <div class="dropdown topbar-head-dropdown ms-1 header-item">
                                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                                         <i class='bx bx-shopping-bag fs-22'></i>
                                         <span class="position-absolute topbar-badge cartitem-badge fs-10 translate-middle badge rounded-pill bg-info">5</span>
@@ -360,7 +360,7 @@ function UserHeader() {
                                             <Link href="apps-ecommerce-checkout.html" class="btn btn-success text-center w-100">Checkout</Link>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
 
                                 <div class="ms-1 header-item d-none d-sm-flex">

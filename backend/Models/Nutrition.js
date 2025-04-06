@@ -1,5 +1,5 @@
-import mongoose , {model} from "mongoose";
-const {Schema} = mongoose;
+import mongoose from "mongoose";
+const { Schema, model, models } = mongoose;
 const { ObjectId } = mongoose.Schema.Types;
 
 const nutritionSchema = new Schema({
@@ -20,6 +20,6 @@ const nutritionSchema = new Schema({
       }
     ],
     date: { type: Date, default: Date.now },
-})
+}, { timestamps: true });
 
-export default model('nutritions' , nutritionSchema);
+export default models.nutritions || model('nutritions', nutritionSchema);

@@ -16,6 +16,6 @@ const workoutSchema = new Schema({
     ],
     tags: [String],
     date: { type: Date, default: Date.now },
-})
+}, { timestamps: true });
 
 export default model('workout' , workoutSchema);

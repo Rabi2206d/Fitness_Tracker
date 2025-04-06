@@ -5,7 +5,7 @@ const feedbackrouter = express.Router();
 
 feedbackrouter.get("/getfeedback" , fetchUser , async (req , res)=>{
     try {
-        const feedback = await feedbackdata.find({user : req.userId})
+        const feedback = await feedbackdata.find({user : req.userid})
         res.status(200).json(feedback);
     } catch (error) {
        res.status(500).json({error : "Internal Server Error"});
@@ -21,7 +21,7 @@ feedbackrouter.post("/addfeedback" , fetchUser , async (req , res)=>{
 
        const feedback = new feedbackdata({
         comments,
-        user : req.userId
+        user : req.userid
        })
        const saveFeedback = await feedback.save();
        res.status(200).json(saveFeedback);
@@ -40,7 +40,7 @@ feedbackrouter.delete("/deletefeedback/:id", fetchUser , async (req, res) => {
         }
 
         // Check if the user is the owner of the feedback
-        if (feedback.user.toString() !== req.userId) {
+        if (feedback.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
@@ -63,7 +63,7 @@ feedbackrouter.put("/updatefeedback/:id", fetchUser , async (req, res) => {
         }
 
         // Check if the user is the owner of the feedback
-        if (feedback.user.toString() !== req.userId) {
+        if (feedback.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 

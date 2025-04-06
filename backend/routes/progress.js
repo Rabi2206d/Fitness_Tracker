@@ -5,7 +5,7 @@ const progressrouter = express.Router();
 
 progressrouter.get("/getprogress" , fetchUser , async (req , res)=>{
     try {
-        const progress = await progressdata.find({user : req.userId})
+        const progress = await progressdata.find({user : req.userid})
         res.status(200).json(progress);
     } catch (error) {
        res.status(500).json({error : "Internal Server Error"});
@@ -42,7 +42,7 @@ progressrouter.delete("/deleteprogress/:id", fetchUser , async (req, res) => {
         }
 
         // Check if the user is the owner of the feedback
-        if (feedback.user.toString() !== req.userId) {
+        if (feedback.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
@@ -55,7 +55,6 @@ progressrouter.delete("/deleteprogress/:id", fetchUser , async (req, res) => {
 
 
 progressrouter.put("/updateprogress/:id", fetchUser , async (req, res) => {
-    const { weight } = req.body;
     const progressid = req.params.id;
 
     try {
@@ -64,12 +63,11 @@ progressrouter.put("/updateprogress/:id", fetchUser , async (req, res) => {
             return res.status(404).json({ error: "Progress not found" });
         }
 
-        // Check if the user is the owner of the feedback
-        if (progress.user.toString() !== req.userId) {
+        if (progress.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
-        progress.weight = weight || progress.weight; // Update comments if provided
+        Object.assign(progress, req.body);
         const updateProgress = await progress.save();
         res.status(200).json(updateProgress);
     } catch (error) {

@@ -21,7 +21,7 @@ function Login() {
             });
             const logindata = await res.json()
             console.log(logindata);
-            localStorage.setItem("token",logindata.token);
+            localStorage.setItem("auth-token",logindata.token);
             if (logindata.user && logindata.user.status === 'admin') {
                 navigate('/admin');
             } else {

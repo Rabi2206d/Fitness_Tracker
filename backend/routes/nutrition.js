@@ -5,7 +5,7 @@ const nutritionrouter = express.Router();
 
 nutritionrouter.get("/getnutrition" , fetchUser , async (req , res)=>{
     try {
-        const nutrition = await Nutritiondata.find({user : req.userId})
+        const nutrition = await Nutritiondata.find({user : req.userid})
         res.status(200).json(nutrition);
     } catch (error) {
        res.status(500).json({error : "Internal Server Error"});
@@ -15,19 +15,19 @@ nutritionrouter.get("/getnutrition" , fetchUser , async (req , res)=>{
 
 // Route : 2 Add Note
 nutritionrouter.post("/addnutrition" , fetchUser , async (req , res)=>{
-    const { mealType, foodItems, calories, macros } = req.body;
+    const { mealType, foodItems } = req.body;
     
     try {
-       if(!mealType || !foodItems || !calories){
+       if(!mealType || !foodItems || foodItems.length === 0){
         return res.status(400).json({error : "All fields are required"});
        }
 
        const nutrition = new Nutritiondata({
         user: req.userid,
-        mealType,
-        foodItems,
-        calories,
-        macros,
+        meals: [{
+            type: mealType,
+            items: foodItems, 
+        }],
        })
        const saveNutrition = await nutrition.save();
        res.status(200).json(saveNutrition);
@@ -46,7 +46,7 @@ nutritionrouter.delete("/deletenutrition/:id", fetchUser, async(req,res)=>{
             return res.status(400).json({error: "Nutrition not Found"});
         }
         
-        // if(note.user.toString !== req.userId)
+        // if(note.user.toString !== req.userid)
         // {
         //     return res.status(400).json({error: "Not Allowed"});
         // }
@@ -61,32 +61,20 @@ nutritionrouter.delete("/deletenutrition/:id", fetchUser, async(req,res)=>{
 
 // Route : 4 Update Nutrition
 nutritionrouter.put("/updatenutrition/:id", fetchUser, async (req, res) => {
-    const { id } = req.params;
-    const { mealType, foodItems, calories } = req.body;
+    const { id } = req.params.id;
 
     try {
-        // Find the nutrition record by ID
         let nutrition = await Nutritiondata.findById(id);
-
-        // If nutrition doesn't exist, return an error
         if (!nutrition) {
             return res.status(400).json({ error: "Nutrition record not found" });
         }
-
-        // Ensure the user is the owner of the nutrition record
-        if (nutrition.user.toString() !== req.userId) {
-            return res.status(403).json({ error: "Not allowed to update another user's record" });
+        if (nutrition.user.toString() !== req.userid) {
+            return res.status(403).json({ error: "Not Allowed" });
         }
 
-        // Update the nutrition record with the new data
-        nutrition = await Nutritiondata.findByIdAndUpdate(
-            id,
-            { $set: { mealType, foodItems, calories } },
-            { new: true }
-        );
-
-        // Return the updated nutrition record
-        return res.status(200).json(nutrition);
+        Object.assign(nutrition, req.body);
+        const updateNutrition = await nutrition.save();
+        return res.status(200).json(updateNutrition);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal Server Error" });

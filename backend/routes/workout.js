@@ -6,7 +6,7 @@ const workoutrouter = express.Router();
 // Get Workout Details
 workoutrouter.get("/getworkoutdetails" , fetchUser , async (req , res)=>{
     try {
-        const workout = await workdata.find({user : req.userId})
+        const workout = await workdata.find({user : req.userid})
         res.status(200).json(workout);
     } catch (error) {
        res.status(500).json({error : "Internal Server Error"});
@@ -15,19 +15,15 @@ workoutrouter.get("/getworkoutdetails" , fetchUser , async (req , res)=>{
 
 // Add Workout
 workoutrouter.post("/addworkout" , fetchUser , async (req , res)=>{
-    const { exerciseName, sets, reps, weight, notes, category, tags } = req.body;
+    const { exercises, category, tags } = req.body;
     try {
-       if(!exerciseName || !sets || !reps || !weight || !notes || !category || !tags){
+       if(!exercises || !category || !tags){
         return res.status(400).json({error : "All fields are required"});
        }
 
        const workout = new workdata({
         user: req.userid,
-        exerciseName,
-        sets,
-        reps,
-        weight,
-        notes,
+        exercises,
         category,
         tags,
        })
@@ -48,7 +44,7 @@ workoutrouter.delete("/deleteworkout/:id", fetchUser, async (req, res) => {
             return res.status(404).json({ error: "Workout not found" });
         }
 
-        if (workout.user.toString() !== req.userId) {
+        if (workout.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
@@ -61,7 +57,6 @@ workoutrouter.delete("/deleteworkout/:id", fetchUser, async (req, res) => {
 
 // Update Workouts
 workoutrouter.put("/updateworkout/:id", fetchUser, async (req, res) => {
-    const { sets, reps } = req.body;
     const workoutid  = req.params.id;
 
     try {
@@ -70,13 +65,11 @@ workoutrouter.put("/updateworkout/:id", fetchUser, async (req, res) => {
             return res.status(404).json({ error: "Workout not found" });
         }
     
-        if (workout.user.toString() !== req.userId) {
+        if (workout.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
     
-        workout.sets = sets !== undefined ? sets : workout.sets; 
-        workout.reps = reps !== undefined ? reps : workout.reps; 
-    
+        Object.assign(workout, req.body);
         const updatedWorkout = await workout.save(); 
         res.status(200).json(updatedWorkout);
     } catch (error) {

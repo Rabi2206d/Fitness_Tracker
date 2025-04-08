@@ -1,6 +1,7 @@
 import express from "express";
 import fetchUser from "../middleware/fetchUser.js";
-import progressdata from '../Models/progress.js';
+import progressdata from "../Models/progress.js";
+
 const progressrouter = express.Router();
 
 progressrouter.get("/getprogress" , fetchUser , async (req , res)=>{
@@ -33,20 +34,20 @@ progressrouter.post("/addprogress" , fetchUser , async (req , res)=>{
 })
 
 progressrouter.delete("/deleteprogress/:id", fetchUser , async (req, res) => {
-    const progressid = req.params.id;
+    const { id } = req.params;
 
     try {
-        const progress = await progressdata.findById(progressid);
+        const progress = await progressdata.findById(id);
         if (!progress) {
             return res.status(404).json({ error: "Progress not found" });
         }
 
         // Check if the user is the owner of the feedback
-        if (feedback.user.toString() !== req.userid) {
+        if (progress.user.toString() !== req.userid) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
-        await progressdata.findByIdAndDelete(progressid);
+        await progressdata.findByIdAndDelete(id);
         res.status(200).json({ message: "Progress deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });

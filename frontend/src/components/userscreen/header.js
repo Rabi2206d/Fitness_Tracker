@@ -747,6 +747,11 @@ function UserHeader() {
                                         <i class="ri-apps-2-line"></i> <span>Nutritions</span>
                                     </Link>
                                 </li>
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/progress">
+                                        <i class="ri-apps-2-line"></i> <span>Progress</span>
+                                    </Link>
+                                </li>
                                 
 
                                 <li class="nav-item">

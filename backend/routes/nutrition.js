@@ -38,10 +38,10 @@ nutritionrouter.post("/addnutrition" , fetchUser , async (req , res)=>{
 
 // Route : 3 Delete Note
 nutritionrouter.delete("/deletenutrition/:id", fetchUser, async(req,res)=>{
-    const {id} = req.params;
+    const { id } = req.params;
     try {
-        let nutrition = await Nutritiondata.findById({_id : id});      
-        if(!note)
+        let nutrition = await Nutritiondata.findById(id);      
+        if(!nutrition)
         {
             return res.status(400).json({error: "Nutrition not Found"});
         }
@@ -50,8 +50,8 @@ nutritionrouter.delete("/deletenutrition/:id", fetchUser, async(req,res)=>{
         // {
         //     return res.status(400).json({error: "Not Allowed"});
         // }
-        nutrition = await Nutritiondata.findByIdAndDelete(id);
-        return  res.status(400).json({success: "Nutrition Deleted",nutrition : nutrition})
+        await Nutritiondata.findByIdAndDelete(id);
+        return res.status(200).json({success: "Nutrition Deleted",nutrition : nutrition})
     } catch (error) {
         res.status(500).json({error : "Internal Server Error"});
     }
@@ -61,7 +61,7 @@ nutritionrouter.delete("/deletenutrition/:id", fetchUser, async(req,res)=>{
 
 // Route : 4 Update Nutrition
 nutritionrouter.put("/updatenutrition/:id", fetchUser, async (req, res) => {
-    const { id } = req.params.id;
+    const { id } = req.params;
 
     try {
         let nutrition = await Nutritiondata.findById(id);
@@ -69,12 +69,15 @@ nutritionrouter.put("/updatenutrition/:id", fetchUser, async (req, res) => {
             return res.status(400).json({ error: "Nutrition record not found" });
         }
         if (nutrition.user.toString() !== req.userid) {
-            return res.status(403).json({ error: "Not Allowed" });
+            return res.status(403).json({ error: "Not Authorized" });  
         }
 
-        Object.assign(nutrition, req.body);
-        const updateNutrition = await nutrition.save();
-        return res.status(200).json(updateNutrition);
+        const { mealType, foodItems } = req.body;
+        nutrition.meals[0].type = mealType;
+        nutrition.meals[0].items = foodItems;
+
+        const updatedNutrition = await nutrition.save();
+        return res.status(200).json(updatedNutrition);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal Server Error" });

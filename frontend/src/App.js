@@ -7,8 +7,8 @@ import AdminHome from './components/adminscreen';
 import Login from './components/userscreen/login';
 import UserDetails from './components/adminscreen/user';
 import Progress from './components/userscreen/progress';
-
-
+import Nutrition from './components/userscreen/nutrition';
+import Workout from './components/userscreen/workout';
 
 function App() {
   return (
@@ -20,7 +20,8 @@ function App() {
       <Route path='/register' element={ <Register/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/progress' element={<Progress/>}/>
-
+      <Route path='/nutritions' element={<Nutrition/>}/>
+      <Route path='/workout' element={<Workout/>}/>
 
       {/* admin Routes  */}
       <Route path='/admin' element={ <AdminHome/>}/>

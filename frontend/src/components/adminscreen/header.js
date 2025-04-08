@@ -631,7 +631,7 @@ function AdminHeader({ file ,userName }) {
                                         <span class="d-flex align-items-center">
                                             <img
                                                 className="rounded-circle header-profile-user"
-                                                src={`http://localhost:4000/${file}`}  // Dynamically set the avatar image
+                                                src={`http://localhost:4000/uploads/${file}`}  // Dynamically set the avatar image
                                                 alt="Header Avatar"
                                                 style={{ width: '50px', height: '50px' }}
                                             />
@@ -746,13 +746,7 @@ function AdminHeader({ file ,userName }) {
                                         <i class="ri-apps-2-line"></i> <span>Users</span>
                                     </Link>
                                 </li>
-
-                                <li class="nav-item">
-                                    <Link class="nav-link menu-link" to="/chat">
-                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Chat</span>
-                                    </Link>
-                                </li>
-
+                                
 
                             </ul>
                         </div>

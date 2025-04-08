@@ -738,11 +738,34 @@ function UserHeader() {
                                   
                                 </li>
                                 <li class="nav-item">
-                                    <Link class="nav-link menu-link" href="#sidebarApps" >
-                                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Apps</span>
+                                    <Link class="nav-link menu-link" to="/workout">
+                                        <i class="ri-apps-2-line"></i> <span>Workouts</span>
                                     </Link>
-                                 
                                 </li>
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/nutritions">
+                                        <i class="ri-apps-2-line"></i> <span>Nutritions</span>
+                                    </Link>
+                                </li>
+                                
+
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/feedback">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Feedback</span>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/profile">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Profile</span>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/logout">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Logout</span>
+                                    </Link>
+                                </li>
+
+
 
                     
 

@@ -6,6 +6,7 @@ import Home from './components/userscreen/home';
 import AdminHome from './components/adminscreen';
 import Login from './components/userscreen/login';
 import UserDetails from './components/adminscreen/user';
+import Progress from './components/userscreen/progress';
 
 
 
@@ -18,6 +19,7 @@ function App() {
       <Route path='/' element={<Home/>}/>
       <Route path='/register' element={ <Register/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/progress' element={<Progress/>}/>
 
 
       {/* admin Routes  */}

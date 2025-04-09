@@ -91,7 +91,8 @@ router.post("/login", async (req, res) => {
                     id: userData._id,
                     name: userData.name,
                     email: userData.email,
-                    status: userData.status
+                    status: userData.status,
+                    profileImage: userData.file
                 }
             });
         });

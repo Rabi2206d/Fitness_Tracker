@@ -1,7 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function UserHeader() {
+    const [user, setUser] = useState({
+        name: 'User',
+        profileImage: null
+      });
+    
+      useEffect(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+          setUser(JSON.parse(savedUser));
+          return;
+        }
+    
+        // 2. Fallback to JWT token decoding
+        const token = localStorage.getItem('auth-token');
+        if (token) {
+          try {
+            // Simple JWT payload extraction
+            const payload = token.split('.')[1];
+            const decoded = JSON.parse(atob(payload));
+            
+            if (decoded?.user) {
+              setUser({
+                name: decoded.user.name || 'User',
+                profileImage: decoded.user.profileImage || null
+              });
+            }
+          } catch (error) {
+            console.error('Token decode error:', error);
+          }
+        }
+      }, []);
   return (
     <>
  <div id="layout-wrapper">
@@ -629,15 +660,15 @@ function UserHeader() {
                                 <div class="dropdown ms-sm-3 header-item topbar-user">
                                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="d-flex align-items-center">
-                                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar" />
+                                            <img class="rounded-circle header-profile-user" src={`http://localhost:4000/uploads/${user.profileImage}`} alt="User Avatar" />
                                             <span class="text-start ms-xl-2">
-                                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna Adame</span>
-                                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{user.name}</span>
+                                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">User</span>
                                             </span>
                                         </span>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <h6 class="dropdown-header">Welcome Anna!</h6>
+                                        <h6 class="dropdown-header">Welcome {user.name.charAt(0).toUpperCase()}!</h6>
                                         <Link class="dropdown-item" href="pages-profile.html">
                                             <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
                                             <span class="align-middle">Profile</span>
@@ -753,7 +784,11 @@ function UserHeader() {
                                     </Link>
                                 </li>
                                 
-
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/workoutanalytics">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Workout Analytics</span>
+                                    </Link>
+                                </li>
                                 <li class="nav-item">
                                     <Link class="nav-link menu-link" to="/FeedbackForm">
                                         <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Feedback</span>

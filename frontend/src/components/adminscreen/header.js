@@ -643,37 +643,11 @@ function AdminHeader({ file ,userName }) {
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <h6 class="dropdown-header">Welcome Anna!</h6>
-                                        <Link class="dropdown-item" href="pages-profile.html">
+                                        <Link class="dropdown-item" to="/profile">
                                             <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
                                             <span class="align-middle">Profile</span>
                                         </Link>
-                                        <Link class="dropdown-item" href="apps-chat.html">
-                                            <i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>
-                                            <span class="align-middle">Messages</span>
-                                        </Link>
-                                        <Link class="dropdown-item" href="apps-tasks-kanban.html">
-                                            <i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>
-                                            <span class="align-middle">Taskboard</span>
-                                        </Link>
-                                        <Link class="dropdown-item" href="pages-faqs.html">
-                                            <i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i>
-                                            <span class="align-middle">Help</span>
-                                        </Link>
-                                        <div class="dropdown-divider"></div>
-                                        <Link class="dropdown-item" href="pages-profile.html">
-                                            <i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i>
-                                            <span class="align-middle">Balance : <b>$5971.67</b></span>
-                                        </Link>
-                                        <Link class="dropdown-item" href="pages-profile-settings.html">
-                                            <span class="badge bg-success-subtle text-success mt-1 float-end">New</span>
-                                            <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i>
-                                            <span class="align-middle">Settings</span>
-                                        </Link>
-                                        <Link class="dropdown-item" href="auth-lockscreen-basic.html">
-                                            <i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i>
-                                            <span class="align-middle">Lock screen</span>
-                                        </Link>
-                                        <Link class="dropdown-item" href="auth-logout-basic.html">
+                                        <Link class="dropdown-item" to="/logout">
                                             <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
                                             <span class="align-middle" data-key="t-logout">Logout</span>
                                         </Link>
@@ -736,13 +710,13 @@ function AdminHeader({ file ,userName }) {
                             </div>
                             <ul class="navbar-nav" id="navbar-nav">
                                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                                <li class="nav-item">
-                                    <Link class="nav-link menu-link" to="/admin">
+                                <li class="nav-item ">
+                                    <Link class="nav-link menu-link active" to="/admin">
                                         <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
                                     </Link>
                                 </li>
-                                <li class="nav-item">
-                                    <Link class="nav-link menu-link" to="/user">
+                                <li class="nav-item ">
+                                    <Link class="nav-link menu-link active" to="/user">
                                         <i class="ri-apps-2-line"></i> <span>Users</span>
                                     </Link>
                                 </li>

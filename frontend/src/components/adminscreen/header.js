@@ -720,7 +720,11 @@ function AdminHeader({ file ,userName }) {
                                         <i class="ri-apps-2-line"></i> <span>Users</span>
                                     </Link>
                                 </li>
-                                
+                                <li class="nav-item ">
+                                    <Link class="nav-link menu-link active" to="/FeedbackTable">
+                                        <i class="ri-apps-2-line"></i> <span>Feedback</span>
+                                    </Link>
+                                </li>
 
                             </ul>
                         </div>

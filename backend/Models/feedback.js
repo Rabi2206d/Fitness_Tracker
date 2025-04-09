@@ -1,20 +1,33 @@
-import mongoose , {model} from "mongoose";
-const {Schema} = mongoose;
-const { ObjectId } = mongoose.Schema.Types;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
 
 const FeedbackSchema = new Schema({
-    user : {
-        type : ObjectId,
-        ref : 'user'
-    },
-    comments : {
-        type : String,
-        required : true
-    },
-    createdAt : {
-        type : Date,
-        default : Date.now
-    }
-})
+  user: {
+    type: ObjectId,
+    ref: "user",
+    required: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  quality: {
+    type: String,
+    required: true
+  },
+  suggestion: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-export default model('feedback' ,FeedbackSchema);
+export default mongoose.model("feedback", FeedbackSchema);

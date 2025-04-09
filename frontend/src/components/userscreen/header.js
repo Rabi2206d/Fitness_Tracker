@@ -755,7 +755,7 @@ function UserHeader() {
                                 
 
                                 <li class="nav-item">
-                                    <Link class="nav-link menu-link" to="/feedback">
+                                    <Link class="nav-link menu-link" to="/FeedbackForm">
                                         <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Feedback</span>
                                     </Link>
                                 </li>

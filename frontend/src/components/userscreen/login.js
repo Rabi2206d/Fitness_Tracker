@@ -49,7 +49,7 @@ function Login() {
             if (logindata.user && logindata.user.status === 'admin') {
                 navigate('/admin');
             } else {
-                navigate('/user');
+                navigate('/progress');
             }
         } catch (error) {
             setError("Something went wrong. Try again.");

@@ -6,14 +6,20 @@ import { Link } from 'react-router-dom';
 function UserDetails() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [displayedUsers, setDisplayedUsers] = useState([]); // Users to display on current page
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // You can adjust this number
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     axios.get('http://localhost:4000/api/users')
       .then((res) => {
         setUsers(res.data);
-        setFilteredUsers(res.data); // Initialize filtered users with all users
+        setFilteredUsers(res.data);
       })
       .catch((err) => {
         console.error("Error fetching users:", err.response ? err.response.data : err.message);
@@ -36,10 +42,32 @@ function UserDetails() {
       );
       setFilteredUsers(filtered);
     }
+    // Reset to first page when search changes
+    setCurrentPage(1);
   }, [searchQuery, users]);
+
+  // Handle pagination when filteredUsers changes
+  useEffect(() => {
+    // Calculate total pages
+    const calculatedTotalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    setTotalPages(calculatedTotalPages);
+    
+    // Get current users to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+    
+    setDisplayedUsers(currentItems);
+  }, [filteredUsers, currentPage, itemsPerPage]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
   };
 
   const loggedInUser = users[0];
@@ -71,6 +99,15 @@ function UserDetails() {
                       <div className="col-sm">
                         <div>
                           <h5 className="card-title mb-0">User List</h5>
+                        </div>
+                      </div>
+                      <div className="col-sm-auto">
+                        <div className="d-flex align-items-center">
+                          <span className="text-muted me-2">Showing</span>
+                          <span className="fw-semibold">
+                            {(currentPage - 1) * itemsPerPage + 1} -{' '}
+                            {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of {filteredUsers.length}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -113,8 +150,8 @@ function UserDetails() {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {filteredUsers.length > 0 ? (
-                            filteredUsers.map((user) => (
+                          {displayedUsers.length > 0 ? (
+                            displayedUsers.map((user) => (
                               <tr key={user._id}>
                                 <td className="id">{user.name}</td>
                                 <td className="customer_name">{user.email}</td>
@@ -157,13 +194,38 @@ function UserDetails() {
                     </div>
                     <div className="d-flex justify-content-end">
                       <div className="pagination-wrap hstack gap-2">
-                        <Link className="page-item pagination-prev disabled" to="#">
+                        <button 
+                          className={`page-item pagination-prev ${currentPage === 1 ? 'disabled' : ''}`}
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                        >
                           Previous
-                        </Link>
-                        <ul className="pagination listjs-pagination mb-0"></ul>
-                        <Link className="page-item pagination-next" to="#">
+                        </button>
+                        
+                        {/* Page numbers */}
+                        <ul className="pagination listjs-pagination mb-0">
+                          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                            <li 
+                              key={page} 
+                              className={`page-item ${currentPage === page ? 'active' : ''}`}
+                            >
+                              <button 
+                                className="page-link" 
+                                onClick={() => handlePageChange(page)}
+                              >
+                                {page}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                        
+                        <button 
+                          className={`page-item pagination-next ${currentPage === totalPages ? 'disabled' : ''}`}
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                        >
                           Next
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>

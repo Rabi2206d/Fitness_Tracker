@@ -64,12 +64,12 @@ router.post("/login", async (req, res) => {
 
         const userData = await User.findOne({ email });
         if (!userData) {
-            return res.json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         const isMatch = await bcrypt.compare(password, userData.password);
         if (!isMatch) {
-            return res.json({ message: 'Invalid Credentials' });
+            return res.status(401).json({ message: 'Invalid Credentials' });
         }
 
         const payload = {
@@ -78,26 +78,23 @@ router.post("/login", async (req, res) => {
             }
         };
 
-        
-       // Sign the JWT
-       jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: '7d'
-    }, (err, token) => {
-        if (err) {
-            console.error("Error signing token: ", err);
-            return res.status(500).json({ err: 'Error signing token' });
-        }
-        res.status(200).json({ 
-            token,
-            user: {
-                id: userData._id,
-                name: userData.name,
-                email: userData.email,
-                status: userData.status
+        jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '7d'
+        }, (err, token) => {
+            if (err) {
+                console.error("Error signing token: ", err);
+                return res.status(500).json({ err: 'Error signing token' });
             }
+            res.status(200).json({ 
+                token,
+                user: {
+                    id: userData._id,
+                    name: userData.name,
+                    email: userData.email,
+                    status: userData.status
+                }
+            });
         });
-        console.log("User  token is: " + token);
-    });
 
     } catch (error) {
         console.error("Login Error:", error);
@@ -106,51 +103,6 @@ router.post("/login", async (req, res) => {
 });
 
 
-    // const {email , password} = req.body;
-
-    // try {
-    //     if(!email || !password){
-    //         return res.status(400).json({error : "All fields are required"});
-    //     }
-
-    //     if(!email.includes('@')){
-    //         return res.status(400).json({error : "Invalid Email"});
-    //     }
-
-    //     const user = await User.findOne({email});
-    //     if(!user){
-    //         return res.status(400).json({error : "user not found"})
-    //     }
-
-    //     const dotMatch = await bcrypt.compare(password , user.password);
-    //     if(dotMatch){
-    //         const token = jwt.sign({userid : user.id} , process.env.JWT_SECRET , {
-    //             expiresIn : "7d"
-    //         })
-    //         return res.status(200).json({token});
-    //     }
-    //     else{
-    //         res.status(400).json({error : "Invalid Credentials"});
-    //     }
-
-    // } catch (error) {
-    //    res.status(500).json({error : "Internal Server Error"}) 
-    // }
-
-
-
-
-
-// Route 3 : User get
-// router.get("/getuser" , fetchUser , async (req ,res)=>{
-//     try {
-//         const userid = req.userid;
-//         const user = await User.findById(userid).select('-password');
-//         res.status(200).json({user});
-//     } catch (error) {
-//        res.status(500).json({error : "Internal Server Error"});
-//     }
-// })
 
 
 

@@ -9,6 +9,7 @@ import UserDetails from './components/adminscreen/user';
 import Progress from './components/userscreen/progress';
 import Nutrition from './components/userscreen/nutrition';
 import Workout from './components/userscreen/workout';
+import WorkoutAnalytics from './components/userscreen/workoutanalytics';
 
 function App() {
   return (
@@ -19,9 +20,11 @@ function App() {
       <Route path='/' element={<Login/>}/>
       <Route path='/register' element={ <Register/>}/>
       {/* <Route path='/login' element={<Login/>}/> */}
+      <Route path='/userdashboard' element={<Home/>}/>
       <Route path='/progress' element={<Progress/>}/>
       <Route path='/nutritions' element={<Nutrition/>}/>
       <Route path='/workout' element={<Workout/>}/>
+      <Route path='/workoutanalytics' element={<WorkoutAnalytics/>}/>
 
       {/* admin Routes  */}
       <Route path='/admin' element={ <AdminHome/>}/>

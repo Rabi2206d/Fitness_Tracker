@@ -228,7 +228,7 @@ function Register() {
 
 
                                                 <div class="mb-3 text-start">
-                                                    <label class="form-label" for="phone-input">Experience</label>
+                                                    <label class="form-label" for="phone-input">Profile Photo</label>
                                                     <div class="position-relative auth-pass-inputgroup">
                                                         <input type="file"
                                                             className={`form-control mt-2 ${formErrors.file ? 'is-invalid' : ''}`}

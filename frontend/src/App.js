@@ -13,6 +13,7 @@ import WorkoutAnalytics from './components/userscreen/workoutanalytics';
 import FeedbackForm from './components/userscreen/FeedbackForm';
 import FeedbackTable from './components/adminscreen/FeedbackTable';
 import NutritionAnalytics from './components/userscreen/nutritionanalytics';
+import ProgressAnalytics from './components/userscreen/progressanalytics';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
       <Route path='/FeedbackForm' element={<FeedbackForm/>} />
       <Route path='/workoutanalytics' element={<WorkoutAnalytics/>}/>
       <Route path='/nutritionanalytics' element={<NutritionAnalytics/>}/>
-      <Route path='/workoutanalytics' element={<WorkoutAnalytics/>}/>
+      <Route path='/progressanalytics' element={<ProgressAnalytics/>}/>
 
       {/* admin Routes  */}
       <Route path='/admin' element={ <AdminHome/>}/>

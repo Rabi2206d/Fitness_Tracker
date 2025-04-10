@@ -5,7 +5,6 @@ import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import UserFooter from './footer';
 import UserHeader from './header';
-import { Modal, Button } from 'react-bootstrap';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -15,8 +14,6 @@ const NutritionAnalytics = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [timeRange, setTimeRange] = useState('week');
-  const [showModal, setShowModal] = useState(false);
-  const [selectedMeal, setSelectedMeal] = useState(null);
 
   // Fetch data from backend
   useEffect(() => {
@@ -45,18 +42,6 @@ const NutritionAnalytics = () => {
     } catch {
       return dateString || 'N/A';
     }
-  };
-
-  // Handle view details click
-  const handleViewDetails = (meal) => {
-    setSelectedMeal(meal);
-    setShowModal(true);
-  };
-
-  // Close modal
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedMeal(null);
   };
 
   // Prepare chart data
@@ -550,12 +535,12 @@ const NutritionAnalytics = () => {
                                         ))}
                                       </td>
                                       <td>
-                                        <button 
+                                        <a 
                                           className="btn btn-sm btn-soft-primary"
-                                          onClick={() => handleViewDetails(mealEntry)}
+                                          href="/nutrition"
                                         >
                                           View Details
-                                        </button>
+                                        </a>
                                       </td>
                                     </tr>
                                   ))}
@@ -615,45 +600,6 @@ const NutritionAnalytics = () => {
         </div>
       </div>
 
-      {/* Meal Details Modal */}
-      <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Meal Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedMeal && (
-            <>
-              <div className="mb-3">
-                <h5 className="mb-1">Meal Summary</h5>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <p className="mb-1"><strong>Date:</strong> {formatDate(selectedMeal.date)}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <h5 className="mb-3">Meals</h5>
-                {selectedMeal.meals?.map((meal, index) => (
-                  <div key={index} className="mb-3">
-                    <h6 className="text-capitalize">{meal.type}</h6>
-                    <ul className="list-group">
-                      {meal.items.map((item, i) => (
-                        <li key={i} className="list-group-item">{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
 
       <UserFooter/>
     </>

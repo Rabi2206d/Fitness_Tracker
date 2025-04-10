@@ -790,6 +790,16 @@ function UserHeader() {
                                     </Link>
                                 </li>
                                 <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/nutritionanalytics">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Nutrition Analytics</span>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link class="nav-link menu-link" to="/progressanalytics">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Progress Analytics</span>
+                                    </Link>
+                                </li>
+                                <li class="nav-item">
                                     <Link class="nav-link menu-link" to="/FeedbackForm">
                                         <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Feedback</span>
                                     </Link>

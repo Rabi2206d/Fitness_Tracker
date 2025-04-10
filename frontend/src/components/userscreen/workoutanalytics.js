@@ -462,10 +462,9 @@ const WorkoutAnalytics = () => {
         }
       },
       x: {
-        type: 'category', // Changed from time to category since we're formatting dates manually
+        type: 'category', 
         title: {
-          display: true,
-          text: 'Date'
+          display: true
         },
         ticks: {
           autoSkip: true,

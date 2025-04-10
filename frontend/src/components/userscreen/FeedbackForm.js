@@ -1,153 +1,169 @@
-  import React, { useState } from 'react';
-  import { Smile, ThumbsUp, MessageCircle, Star } from 'lucide-react';
-  import UserHeader from './header';
+import React, { useState } from 'react';
+import { ThumbsUp } from 'lucide-react';
+import UserHeader from './header';
 
-  const FeedbackForm = () => {
-    const [formData, setFormData] = useState({
-      firstName: '',
-      lastName: '',
-      quality: '',
-      suggestion: '',
-    });
+const FeedbackForm = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    quality: '',
+    suggestion: '',
+  });
 
-    const [message, setMessage] = useState('');
-    const [hoverRating, setHoverRating] = useState(null);
+  const [message, setMessage] = useState('');
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    };
-
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      try {
-        const res = await fetch('http://localhost:4000/api/addfeedback', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (res.ok) {
-          setMessage('Feedback submitted successfully!');
-          setFormData({
-            firstName: '',
-            lastName: '',
-            quality: '',
-            suggestion: '',
-          });
-        } else {
-          setMessage('Error submitting feedback');
-        }
-      } catch (error) {
-        setMessage('Error: ' + error.message);
-      }
-    };
-
-    return (
-      <>
-        <UserHeader />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-          <div className="bg-white p-8 rounded-3xl shadow-xl max-w-2xl w-full border border-gray-100">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                <Smile className="w-8 h-8 text-blue-600" />
-              </div>
-              <h2 className="text-3xl font-bold text-gray-800">Share Your Feedback</h2>
-              <p className="text-gray-500 mt-2">We'd love to hear about your experience</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    placeholder="John"
-                    className="w-full border border-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    className="w-full border border-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">How would you rate your experience?</label>
-                <div className="flex justify-center space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setFormData({...formData, quality: star.toString()})}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(null)}
-                      className="focus:outline-none"
-                    >
-                      <Star
-                        className={`w-8 h-8 ${(hoverRating || formData.quality) >= star ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-                      />
-                    </button>
-                  ))}
-                </div>
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>Poor</span>
-                  <span>Excellent</span>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                  <MessageCircle className="w-4 h-4 mr-2 text-blue-500" />
-                  Your Suggestions
-                </label>
-                <textarea
-                  name="suggestion"
-                  value={formData.suggestion}
-                  onChange={handleChange}
-                  rows="4"
-                  placeholder="What can we do better?"
-                  className="w-full border border-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
-              >
-                <ThumbsUp className="w-5 h-5 mr-2" />
-                Submit Feedback
-              </button>
-
-              {message && (
-                <div className={`mt-4 p-3 rounded-lg text-center ${message.includes('successfully') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-                  {message}
-                </div>
-              )}
-            </form>
-          </div>
-        </div>
-      </>
-    );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  export default FeedbackForm;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.firstName || !formData.lastName || !formData.quality) {
+      setMessage('Please fill in all required fields.');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:4000/api/addfeedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('auth-token')
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setMessage('Feedback submitted successfully!');
+        setFormData({
+          firstName: '',
+          lastName: '',
+          quality: '',
+          suggestion: '',
+        });
+      } else {
+        setMessage('Error submitting feedback');
+      }
+    } catch (error) {
+      setMessage('Error: ' + error.message);
+    }
+  };
+
+  return (
+    <>
+      <UserHeader />
+      <div className="main-content">
+        <div className="page-content">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-12 col-md-10 col-lg-8">
+                <div className="card my-5 shadow-sm">
+                  <div className="card-body">
+                    <h4 className="card-title text-center mb-4">Feedback Form</h4>
+
+                    <form onSubmit={handleSubmit}>
+                      <div className="row">
+                        <div className="col-md-6 mb-3">
+                          <label htmlFor="firstName" className="form-label">
+                            First Name
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-6 mb-3">
+                          <label htmlFor="lastName" className="form-label">
+                            Last Name
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="quality" className="form-label">
+                          Rating
+                        </label>
+                        <select
+                          className="form-select"
+                          id="quality"
+                          name="quality"
+                          value={formData.quality}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="" disabled>
+                            Choose a rating
+                          </option>
+                          <option value="5">5 - Excellent</option>
+                          <option value="4">4 - Very Good</option>
+                          <option value="3">3 - Good</option>
+                          <option value="2">2 - Fair</option>
+                          <option value="1">1 - Poor</option>
+                        </select>
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="suggestion" className="form-label">
+                          Message
+                        </label>
+                        <textarea
+                          className="form-control"
+                          id="suggestion"
+                          name="suggestion"
+                          rows="4"
+                          placeholder="Your feedback..."
+                          value={formData.suggestion}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      <div className="text-center">
+                        <button type="submit" className="btn btn-primary px-4">
+                          <ThumbsUp className="me-2" size={18} />
+                          Submit Feedback
+                        </button>
+                      </div>
+
+                      {message && (
+                        <div
+                          className={`alert mt-4 text-center ${
+                            message.includes('successfully')
+                              ? 'alert-success'
+                              : 'alert-danger'
+                          }`}
+                        >
+                          {message}
+                        </div>
+                      )}
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default FeedbackForm;

@@ -711,11 +711,6 @@ function AdminHeader({ file ,userName }) {
                             <ul class="navbar-nav" id="navbar-nav">
                                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                                 <li class="nav-item ">
-                                    <Link class="nav-link menu-link active" to="/admin">
-                                        <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
-                                    </Link>
-                                </li>
-                                <li class="nav-item ">
                                     <Link class="nav-link menu-link active" to="/user">
                                         <i class="ri-apps-2-line"></i> <span>Users</span>
                                     </Link>

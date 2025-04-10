@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -72,18 +72,6 @@ function Login() {
 
             <div className="auth-page-content">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="text-center mt-sm-5 mb-4 text-white-50">
-                                <div>
-                                    <a href="index.html" className="d-inline-block auth-logo">
-                                        <img src="assets/images/logo-light.png" alt="" height="20" />
-                                    </a>
-                                </div>
-                                <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="row justify-content-center">
                         <div className="col-md-8 col-lg-6 col-xl-5">
@@ -164,30 +152,11 @@ function Login() {
                                         </div>
                                     </form>
 
-                                    <div className="mt-4 text-center">
-                                        <div className="signin-other-title">
-                                            <h5 className="fs-13 mb-4 title">Sign In with</h5>
-                                        </div>
-                                        <div>
-                                            <button type="button" className="btn btn-primary btn-icon waves-effect waves-light">
-                                                <i className="ri-facebook-fill fs-16"></i>
-                                            </button>
-                                            <button type="button" className="btn btn-danger btn-icon waves-effect waves-light">
-                                                <i className="ri-google-fill fs-16"></i>
-                                            </button>
-                                            <button type="button" className="btn btn-dark btn-icon waves-effect waves-light">
-                                                <i className="ri-github-fill fs-16"></i>
-                                            </button>
-                                            <button type="button" className="btn btn-info btn-icon waves-effect waves-light">
-                                                <i className="ri-twitter-fill fs-16"></i>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
                             <div className="mt-4 text-center">
-                                <p className="mb-0">Don't have an account? <a href="auth-signup-basic.html" className="fw-semibold text-primary text-decoration-underline">Signup</a></p>
+                                <p className="mb-0">Don't have an account? <Link to="/register" className="fw-semibold text-primary text-decoration-underline">Signup</Link></p>
                             </div>
                         </div>
                     </div>
@@ -200,7 +169,7 @@ function Login() {
                         <div className="col-lg-12">
                             <div className="text-center">
                                 <p className="mb-0 text-muted">
-                                    &copy; {new Date().getFullYear()} Velzon. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand
+                                    &copy; {new Date().getFullYear()} Login Crafted with <i className="mdi mdi-heart text-danger"></i> by FMS
                                 </p>
                             </div>
                         </div>

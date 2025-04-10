@@ -300,73 +300,96 @@ function Dashboardhome() {
                     </div> */}
 
                     <div class="row">
-                        <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Workouts</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive table-card">
-                                        <table class="table table-hover table-centered align-middle table-nowrap mb-0">
-                                            <tbody>
-                                            {workouts.map((workout) => (
-                                                <tr key={workout._id}>
-                                                <td>
+                    <div class="col-xl-6">
+    <div class="card">
+        <div class="card-header align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Workouts</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table-card">
+                <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Exercise</th>
+                            <th>Sets</th>
+                            <th>Reps</th>
+                            <th>Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {workouts.map((workout) => (
+                            workout.exercises.length > 0 ? (
+                                workout.exercises.map((exercise, index) => (
+                                    <tr key={`${workout._id}-${index}`}>
+                                        {index === 0 && (
+                                            <>
+                                                <td rowSpan={workout.exercises.length}>
                                                     <div className="d-flex align-items-center">
-                                                    <div>
-                                                        <h5 className="fs-14 my-1">
-                                                        <a href="#" className="text-reset">{workout.title}</a>
-                                                        </h5>
-                                                        <span className="text-muted">
-                                                        {new Date(workout.date).toLocaleDateString()}
-                                                        </span>
-                                                    </div>
+                                                        <div>
+                                                            <h5 className="fs-14 my-1">
+                                                                <a href="#" className="text-reset">{workout.category} Workout</a>
+                                                            </h5>
+                                                            <span className="text-muted">
+                                                                {new Date(workout.date).toLocaleDateString()}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td rowSpan={workout.exercises.length}>
                                                     <h5 className="fs-14 my-1 fw-normal">
                                                         {workout.category}
                                                     </h5>
-                                                    <span className="text-muted">Category</span>
                                                 </td>
-                                                <td>
-                                                    <h5 className="fs-14 my-1 fw-normal">
-                                                    {workout.exercises && workout.exercises.length > 0
-                                                        ? workout.exercises[1].name
-                                                        : "No exercises"}
-                                                    </h5>
-                                                    <span className="text-muted">First Exercise</span>
-                                                </td>
-                                                <td>
-                                                    <h5 className="fs-14 my-1 fw-normal">
-                                                    {workout.exercises?.[0]?.sets || "-"}
-                                                    </h5>
-                                                    <span className="text-muted">Sets</span>
-                                                </td>
-                                                <td>
-                                                    <h5 className="fs-14 my-1 fw-normal">
-                                                    {workout.exercises?.[0]?.reps || "-"}
-                                                    </h5>
-                                                    <span className="text-muted">Reps</span>
-                                                </td>
-                                                <td>
-                                                    <h5 className="fs-14 my-1 fw-normal">
-                                                    {workout.exercises?.[0]?.weight || "-"}
-                                                    </h5>
-                                                    <span className="text-muted">Weight</span>
-                                                </td>
-                                                <td>
-                                                    <h5 className="fs-14 my-1 fw-normal">—</h5>
-                                                    <span className="text-muted">More</span>
-                                                </td>
-                                                </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                            </>
+                                        )}
+                                        <td>
+                                            <h5 className="fs-14 my-1 fw-normal">
+                                                {exercise.name || "N/A"}
+                                            </h5>
+                                        </td>
+                                        <td>
+                                            <h5 className="fs-14 my-1 fw-normal">
+                                                {exercise.sets || "-"}
+                                            </h5>
+                                        </td>
+                                        <td>
+                                            <h5 className="fs-14 my-1 fw-normal">
+                                                {exercise.reps || "-"}
+                                            </h5>
+                                        </td>
+                                        <td>
+                                            <h5 className="fs-14 my-1 fw-normal">
+                                                {exercise.weight || "-"}
+                                            </h5>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr key={workout._id}>
+                                    <td>
+                                        <div className="d-flex align-items-center">
+                                            <div>
+                                                <h5 className="fs-14 my-1">
+                                                    <a href="#" className="text-reset">{workout.category} Workout</a>
+                                                </h5>
+                                                <span className="text-muted">
+                                                    {new Date(workout.date).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colSpan="5" className="text-center">No exercises recorded</td>
+                                </tr>
+                            )
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
                         <div class="col-xl-6">
                             <div class="card card-height-100">

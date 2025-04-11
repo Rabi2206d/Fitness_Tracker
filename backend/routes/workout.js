@@ -1,5 +1,5 @@
 import express from "express";
-import fetchUser from "../middleware/fetchUser.js";
+import fetchUser from '../middleware/fetchUser.js';
 import workdata from '../Models/workout.js';
 const workoutrouter = express.Router();
 

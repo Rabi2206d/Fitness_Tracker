@@ -84,24 +84,6 @@ nutritionrouter.put("/updatenutrition/:id", fetchUser, async (req, res) => {
     }
 });
 
-
-//Route : 5 // update and fetch route
-nutritionrouter.get('getnotebyid/:id',fetchUser ,async (req,res)=>
-{
-const id  =req.params.id;
-
-try {
-    const nutrition = await  Nutritiondata.findById(id);
-    if(!nutrition)
-    {
-        res.status(500).json({error : "No Notes found"});
-    }
-    return res.json({nutrition})
-} catch (error) {
-    res.status(500).json({error : "Internal Server Error"});
-}
-})
-
 // Add this to your nutrition router
 nutritionrouter.get("/nutritionanalytics", fetchUser, async (req, res) => {
     try {
@@ -110,7 +92,7 @@ nutritionrouter.get("/nutritionanalytics", fetchUser, async (req, res) => {
         
         // Calculate date ranges
         const endDate = new Date();
-        const startDate = new Date();
+        let startDate = new Date();
         
         switch (range) {
             case 'week':
@@ -122,8 +104,11 @@ nutritionrouter.get("/nutritionanalytics", fetchUser, async (req, res) => {
             case 'year':
                 startDate.setFullYear(endDate.getFullYear() - 1);
                 break;
-            default: // 'all' or invalid
+            case 'all': // 'all' or invalid
                 startDate = null;
+                break;
+            default:
+                startDate.setDate(endDate().getDate() - 7)
         }
 
         // Build query
@@ -216,6 +201,7 @@ nutritionrouter.get("/nutritionanalytics", fetchUser, async (req, res) => {
 
         // Calculate daily trends
         if (startDate) {
+            // Calculate daily trends only if we have a date range
             const dailyData = {};
             
             // Initialize all days in range
@@ -246,6 +232,33 @@ nutritionrouter.get("/nutritionanalytics", fetchUser, async (req, res) => {
             });
             
             analytics.dailyTrends = Object.values(dailyData);
+        } else {
+            // For "All Time", group by day of all available data
+            const dailyData = {};
+            
+            nutritionData.forEach(entry => {
+                const dateStr = entry.date.toISOString().split('T')[0];
+                if (!dailyData[dateStr]) {
+                    dailyData[dateStr] = {
+                        date: dateStr,
+                        calories: 0,
+                        protein: 0,
+                        carbs: 0,
+                        fat: 0
+                    };
+                }
+                
+                entry.meals.forEach(meal => {
+                    meal.items.forEach(item => {
+                        dailyData[dateStr].calories += item.calories || 0;
+                        dailyData[dateStr].protein += item.protein || 0;
+                        dailyData[dateStr].carbs += item.carbs || 0;
+                        dailyData[dateStr].fat += item.fat || 0;
+                    });
+                });
+            });
+            
+            analytics.dailyTrends = Object.values(dailyData).sort((a, b) => new Date(a.date) - new Date(b.date));
         }
 
         // Calculate macro distribution percentages

@@ -2,11 +2,11 @@ import express from 'express';
 import fetchUser from '../middleware/fetchUser.js';
 import Workout from '../Models/workout.js';
 import Nutrition from '../Models/Nutrition.js';
-import Progress from '../Models/progress.js';
+import Progress from '../Models/Progress.js';
 
 const dashboardRouter = express.Router();
 
-dashboardRouter.get('/dashboard', fetchUser, async (req, res) => {
+dashboardRouter.get('/dashboard', fetchUser , async (req, res) => {
   try {
     const userId = req.userid;
 

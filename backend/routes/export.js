@@ -8,11 +8,6 @@ import stream from 'stream';
 
 const exportrouter = express.Router();
 
-/* =======================
-   NUTRITION EXPORT ROUTES
-========================== */
-
-// Export CSV for nutrition
 exportrouter.get('/csv/nutrition', fetchUser, async (req, res) => {
   try {
     const data = await Nutritiondata.find({ user: req.userid }).lean();
@@ -86,11 +81,6 @@ exportrouter.get('/pdf/nutrition', fetchUser, async (req, res) => {
   }
 });
 
-/* =======================
-   PROGRESS EXPORT ROUTES
-========================== */
-
-// Export CSV for progress
 exportrouter.get('/csv/progress', fetchUser, async (req, res) => {
   try {
     const data = await Progress.find({ user: req.userid }).lean();

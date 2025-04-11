@@ -33,6 +33,28 @@ function UserHeader({ file ,userName }) {
           }
         }
       }, []);
+
+      const handleLogout = async () => {
+        try {
+          // Call the logout endpoint
+          const response = await fetch('http://localhost:4000/api/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'auth-token': localStorage.getItem('auth-token')
+            }
+          });
+      
+          const data = await response.json();
+          
+          if (data.success) {
+            localStorage.removeItem('auth-token');
+            window.location.href = '/';
+          }
+        } catch (error) {
+          console.error('Logout failed:', error);
+        }
+      };
   return (
     <>
  <div id="layout-wrapper">
@@ -233,10 +255,10 @@ function UserHeader({ file ,userName }) {
                                             <span class="align-middle">Profile</span>
                                         </Link>
                                
-                                        <Link class="dropdown-item" to="/logout">
+                                        <button type="submit" class="dropdown-item" onClick={() => handleLogout()}>
                                             <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
                                             <span class="align-middle" data-key="t-logout">Logout</span>
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

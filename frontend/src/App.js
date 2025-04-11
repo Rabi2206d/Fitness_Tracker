@@ -24,7 +24,6 @@ function App() {
      {/* user routes  */}
       <Route path='/' element={<Login/>}/>
       <Route path='/register' element={ <Register/>}/>
-      {/* <Route path='/login' element={<Login/>}/> */}
       <Route path='/userdashboard' element={<Home/>}/>
       <Route path='/progress' element={<Progress/>}/>
       <Route path='/nutritions' element={<Nutrition/>}/>

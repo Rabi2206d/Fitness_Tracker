@@ -48,48 +48,120 @@ const NutritionAnalytics = () => {
   const prepareCalorieTrendChart = () => {
     if (!analyticsData?.dailyTrends?.length) return null;
 
+    // For "All Time" with lots of data, we might want to aggregate by month
+    const shouldAggregate = timeRange === 'all' && analyticsData.dailyTrends.length > 90;
+    
+    let chartData;
+    if (shouldAggregate) {
+        // Aggregate by month
+        const monthlyData = {};
+        analyticsData.dailyTrends.forEach(day => {
+            const monthYear = format(parseISO(day.date), 'MMM yyyy');
+            if (!monthlyData[monthYear]) {
+                monthlyData[monthYear] = {
+                    date: monthYear,
+                    calories: 0,
+                    protein: 0,
+                    carbs: 0,
+                    fat: 0,
+                    count: 0
+                };
+            }
+            monthlyData[monthYear].calories += day.calories;
+            monthlyData[monthYear].protein += day.protein;
+            monthlyData[monthYear].carbs += day.carbs;
+            monthlyData[monthYear].fat += day.fat;
+            monthlyData[monthYear].count++;
+        });
+
+        // Calculate averages
+        chartData = Object.values(monthlyData).map(month => ({
+            ...month,
+            calories: month.calories / month.count,
+            protein: month.protein / month.count,
+            carbs: month.carbs / month.count,
+            fat: month.fat / month.count
+        }));
+    } else {
+        chartData = analyticsData.dailyTrends;
+    }
+
     return {
-      labels: analyticsData.dailyTrends.map(day => formatDate(day.date)),
-      datasets: [{
-        label: 'Calories',
-        data: analyticsData.dailyTrends.map(day => day.calories),
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        tension: 0.1
-      }]
+        labels: chartData.map(day => formatDate(day.date)),
+        datasets: [{
+            label: 'Calories',
+            data: chartData.map(day => day.calories),
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            tension: 0.1
+        }]
     };
-  };
+};
 
-  const prepareMacroTrendChart = () => {
-    if (!analyticsData?.dailyTrends?.length) return null;
+const prepareMacroTrendChart = () => {
+  if (!analyticsData?.dailyTrends?.length) return null;
 
-    return {
-      labels: analyticsData.dailyTrends.map(day => formatDate(day.date)),
+  const shouldAggregate = timeRange === 'all' && analyticsData.dailyTrends.length > 90;
+  
+  let chartData;
+  if (shouldAggregate) {
+      // Similar aggregation as above
+      const monthlyData = {};
+      analyticsData.dailyTrends.forEach(day => {
+          const monthYear = format(parseISO(day.date), 'MMM yyyy');
+          if (!monthlyData[monthYear]) {
+              monthlyData[monthYear] = {
+                  date: monthYear,
+                  calories: 0,
+                  protein: 0,
+                  carbs: 0,
+                  fat: 0,
+                  count: 0
+              };
+          }
+          monthlyData[monthYear].protein += day.protein;
+          monthlyData[monthYear].carbs += day.carbs;
+          monthlyData[monthYear].fat += day.fat;
+          monthlyData[monthYear].count++;
+      });
+
+      chartData = Object.values(monthlyData).map(month => ({
+          ...month,
+          protein: month.protein / month.count,
+          carbs: month.carbs / month.count,
+          fat: month.fat / month.count
+      }));
+  } else {
+      chartData = analyticsData.dailyTrends;
+  }
+
+  return {
+      labels: chartData.map(day => formatDate(day.date)),
       datasets: [
-        {
-          label: 'Protein',
-          data: analyticsData.dailyTrends.map(day => day.protein),
-          borderColor: 'rgba(54, 162, 235, 1)',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          tension: 0.1
-        },
-        {
-          label: 'Carbs',
-          data: analyticsData.dailyTrends.map(day => day.carbs),
-          borderColor: 'rgba(255, 206, 86, 1)',
-          backgroundColor: 'rgba(255, 206, 86, 0.2)',
-          tension: 0.1
-        },
-        {
-          label: 'Fat',
-          data: analyticsData.dailyTrends.map(day => day.fat),
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          tension: 0.1
-        }
+          {
+              label: 'Protein',
+              data: chartData.map(day => day.protein),
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              tension: 0.1
+          },
+          {
+              label: 'Carbs',
+              data: chartData.map(day => day.carbs),
+              borderColor: 'rgba(255, 206, 86, 1)',
+              backgroundColor: 'rgba(255, 206, 86, 0.2)',
+              tension: 0.1
+          },
+          {
+              label: 'Fat',
+              data: chartData.map(day => day.fat),
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              tension: 0.1
+          }
       ]
-    };
   };
+};
 
   const prepareMealDistributionChart = () => {
     if (!analyticsData?.mealDistribution) return null;

@@ -1,5 +1,5 @@
 import express from "express";
-import fetchUser from "../middleware/fetchUser.js";
+import fetchUser from '../middleware/fetchUser.js';
 import feedbackdata from "../Models/feedback.js";
 
 const feedbackrouter = express.Router();

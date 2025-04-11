@@ -79,7 +79,7 @@ function Login() {
                                 <div className="card-body p-4">
                                     <div className="text-center mt-2">
                                         <h5 className="text-primary">Welcome Back!</h5>
-                                        <p className="text-muted">Sign in to continue to Velzon.</p>
+                                        <p className="text-muted">Sign in to continue to FMS.</p>
                                     </div>
 
                                     {error && (

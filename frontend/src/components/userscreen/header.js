@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function UserHeader({ file ,userName }) {
+function UserHeader() {
     const [user, setUser] = useState({
         name: 'User',
         profileImage: null
@@ -10,29 +10,13 @@ function UserHeader({ file ,userName }) {
       useEffect(() => {
         const savedUser = localStorage.getItem('user');
         if (savedUser) {
-          setUser(JSON.parse(savedUser));
-          return;
+            const parsedUser = JSON.parse(savedUser);
+            setUser({
+                name: parsedUser.name || 'User',
+                profileImage: parsedUser.profileImage || null
+            });
         }
-    
-        // 2. Fallback to JWT token decoding
-        const token = localStorage.getItem('auth-token');
-        if (token) {
-          try {
-            // Simple JWT payload extraction
-            const payload = token.split('.')[1];
-            const decoded = JSON.parse(atob(payload));
-            
-            if (decoded?.user) {
-              setUser({
-                name: decoded.user.name || 'User',
-                profileImage: decoded.user.profileImage || null
-              });
-            }
-          } catch (error) {
-            console.error('Token decode error:', error);
-          }
-        }
-      }, []);
+    }, []);
 
       const handleLogout = async () => {
         try {
@@ -49,6 +33,7 @@ function UserHeader({ file ,userName }) {
           
           if (data.success) {
             localStorage.removeItem('auth-token');
+            localStorage.removeItem('user');
             window.location.href = '/';
           }
         } catch (error) {
@@ -237,12 +222,27 @@ function UserHeader({ file ,userName }) {
                                 <div class="dropdown ms-sm-3 header-item topbar-user">
                                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="d-flex align-items-center">
-                                        <img
+                                        {user.profileImage ? (
+                                            <img
                                                 className="rounded-circle header-profile-user"
-                                                src={`http://localhost:4000/uploads/${file}`}  // Dynamically set the avatar image
-                                                alt="Header Avatar"
+                                                src={`http://localhost:4000/uploads/${user.profileImage}`}
+                                                alt="User Avatar"
                                                 style={{ width: '50px', height: '50px' }}
-                                            />                                            <span class="text-start ms-xl-2">
+                                            />
+                                        ) : (
+                                            <div className="avatar-placeholder" style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                borderRadius: '50%',
+                                                backgroundColor: '#ccc',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}>
+                                                {user.name.charAt(0).toUpperCase()}
+                                            </div>
+                                        )}                                          
+                                        <span class="text-start ms-xl-2">
                                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{user.name}</span>
                                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">User</span>
                                             </span>

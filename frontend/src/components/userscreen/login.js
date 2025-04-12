@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from '../AuthContext';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ function Login() {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
@@ -45,6 +47,7 @@ function Login() {
                 return;
             }
 
+            login(logindata.user);
             localStorage.setItem("auth-token", logindata.token);
             if (logindata.user && logindata.user.status === 'admin') {
                 navigate('/admin');

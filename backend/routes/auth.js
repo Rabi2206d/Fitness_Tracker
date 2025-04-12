@@ -116,6 +116,9 @@ router.post("/logout", (req, res) => {
     }
 });
 
+router.get("/verify", fetchUser, async (req, res) => {
+  res.status(200).json({ valid: true });
+});
 
 
 

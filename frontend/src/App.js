@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './components/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import './App.css';
 import Register from './components/userscreen/register';
@@ -18,30 +20,86 @@ import UserProfile from './components/userscreen/profile';
 
 function App() {
   return (
-    <Router>
-    <div className="App">
-     <Routes>
-     {/* user routes  */}
-      <Route path='/' element={<Login/>}/>
-      <Route path='/register' element={ <Register/>}/>
-      <Route path='/userdashboard' element={<Home/>}/>
-      <Route path='/progress' element={<Progress/>}/>
-      <Route path='/nutritions' element={<Nutrition/>}/>
-      <Route path='/workout' element={<Workout/>}/>
-      <Route path='/FeedbackForm' element={<FeedbackForm/>} />
-      <Route path='/workoutanalytics' element={<WorkoutAnalytics/>}/>
-      <Route path='/nutritionanalytics' element={<NutritionAnalytics/>}/>
-      <Route path='/progressanalytics' element={<ProgressAnalytics/>}/>
-      <Route path='/workoutanalytics' element={<WorkoutAnalytics/>}/>
-      <Route path='/profile' element={<UserProfile/>}/>
+    <AuthProvider>
+      <Router>
+      <div className="App">
+      <Routes>
+      {/* user routes  */}
+        <Route path='/' element={<Login/>}/>
+        <Route path='/register' element={ <Register/>}/>
 
-      {/* admin Routes  */}
-      <Route path='/admin' element={ <AdminHome/>}/>
-      <Route path='/user' element={ <UserDetails/>}/>
-      <Route path='/FeedbackTable' element={<FeedbackTable/>}/>
-     </Routes>
-    </div>
-    </Router>
+        
+        <Route path='/userdashboard' element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }/>
+        <Route path='/progress' element={
+          <ProtectedRoute>
+            <Progress/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/nutritions' element={
+          <ProtectedRoute>
+            <Nutrition/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/workout' element={
+          <ProtectedRoute>
+            <Workout/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/FeedbackForm' element={
+          <ProtectedRoute>
+            <FeedbackForm/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/workoutanalytics' element={
+          <ProtectedRoute>
+            <WorkoutAnalytics/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/nutritionanalytics' element={
+          <ProtectedRoute>
+            <NutritionAnalytics/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/progressanalytics' element={
+          <ProtectedRoute>
+            <ProgressAnalytics/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/workoutanalytics' element={
+          <ProtectedRoute>
+            <WorkoutAnalytics/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/profile' element={
+          <ProtectedRoute>
+            <UserProfile/>
+          </ProtectedRoute>
+        }/>
+
+        {/* admin Routes  */}
+        <Route path='/admin' element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminHome/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/user' element={
+          <ProtectedRoute requiredRole="admin">
+            <UserDetails/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/FeedbackTable' element={
+          <ProtectedRoute requiredRole="admin">
+            <FeedbackTable/>
+          </ProtectedRoute>
+        }/>
+      </Routes>
+      </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
